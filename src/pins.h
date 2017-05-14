@@ -143,7 +143,6 @@ namespace pins
     class pin
     {
     private:
-
         // Calculate the adress of the pin control register 
         static constexpr uintptr_t get_PORTx_PCRn_addr()
         {
@@ -167,8 +166,7 @@ namespace pins
 
     public:
         // Setting and getting the pin value
-        inline operator bool() const { return  *((bool*)pdirBB); }
-        //inline operator unsigned() const { return  *reinterpret_cast<volatile uint32_t*>(pdirBB); }
+        inline operator bool() const { return  *((bool*)pdirBB); }    
         inline void operator = (const int v) const { *reinterpret_cast<volatile uint32_t*>(pdorBB) = v; } // assignment  --> somePin = HIGH
         static inline void toggle() { *reinterpret_cast<volatile uint32_t*>(ptorBB) = 1; }                // toggles pin
         static inline int  getValue() { return *reinterpret_cast<volatile uint32_t*>(pdirBB); }           // returns pin value (usefull for static calls) 
