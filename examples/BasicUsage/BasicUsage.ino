@@ -2,12 +2,10 @@
 
 using namespace pins;
 
-pin<13> LED;
-pin<0> SWITCH;
+pin<13> LED(OUTPUT);
+pin<0> SWITCH(INPUT_PULLUP);
 
-void setup() {
-  LED.pinMode(OUTPUT);
-  SWITCH.pinMode(INPUT_PULLUP); 
+void setup() {  
 }
 
 void loop() 
