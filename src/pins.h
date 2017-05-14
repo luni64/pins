@@ -2,7 +2,6 @@
 
 #include <stdint.h>
 #include <core_pins.h>
-#include <type_traits>
 
 namespace pins
 {
@@ -166,18 +165,20 @@ namespace pins
         static constexpr uintptr_t pddrBB = pdirBB + 4 * 32;    //     GPIOx_PDDR = GPIOx_PDOR + 20
 
     public:
-        // Setting and getting the pin value
-
+        // Construction (class contains only static members)
         pin() {}
         pin(int i) { pinMode(i); }
-        pin(const pin&) = delete;
-        inline void operator = (const pin& v) const = delete;
         
-
+        pin(const pin&) = delete;  // disable copy constructor
+        
+        // Setting and getting the pin value
         template<class T>
         operator T() const { return *reinterpret_cast<volatile uint32_t*>(pdirBB); }
         operator bool() const { return *reinterpret_cast<volatile uint32_t*>(pdirBB) & 1; } 
         inline void operator = (const bool v) const { *reinterpret_cast<volatile uint32_t*>(pdorBB) = v; } // assignment  --> somePin = HIGH
+        inline void operator = (const pin& v) const = delete;                                             // disable copying
+        
+        // Pin operations
         static inline void toggle() { *reinterpret_cast<volatile uint32_t*>(ptorBB) = 1; }                // toggles pin
         static inline int  getValue() { return *reinterpret_cast<volatile uint32_t*>(pdirBB); }           // returns pin value (usefull for static calls) 
         static inline void setValue(const int v) { *reinterpret_cast<volatile uint32_t*>(pdorBB) = v; }   // sets value (usefull for static calls) 
