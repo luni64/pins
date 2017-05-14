@@ -165,9 +165,9 @@ namespace pins
         static constexpr uintptr_t pddrBB = pdirBB + 4 * 32;    //     GPIOx_PDDR = GPIOx_PDOR + 20
 
     public:
-        // Setting and getting the pin value
+        // Setting and getting the pin value     
         inline operator bool() const { return  *((bool*)pdirBB); }    
-        inline void operator = (const int v) const { *reinterpret_cast<volatile uint32_t*>(pdorBB) = v; } // assignment  --> somePin = HIGH
+        inline void operator = (const bool v) const { *reinterpret_cast<volatile uint32_t*>(pdorBB) = v; } // assignment  --> somePin = HIGH
         static inline void toggle() { *reinterpret_cast<volatile uint32_t*>(ptorBB) = 1; }                // toggles pin
         static inline int  getValue() { return *reinterpret_cast<volatile uint32_t*>(pdirBB); }           // returns pin value (usefull for static calls) 
         static inline void setValue(const int v) { *reinterpret_cast<volatile uint32_t*>(pdorBB) = v; }   // sets value (usefull for static calls) 
