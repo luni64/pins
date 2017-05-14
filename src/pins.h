@@ -2,12 +2,13 @@
 
 #include <stdint.h>
 #include <core_pins.h>
+#include <type_traits>
 
 namespace pins
 {
     namespace // private
     {
-        enum boards{
+        enum boards {
             notDefined = -1,
             T_LC,
             T3_0_1_2,
@@ -26,7 +27,7 @@ namespace pins
         static_assert(board != boards::notDefined, "Error in Pin.h");
 
         // Indices into GPIOx and PORT arrays below
-        enum portList{
+        enum portList {
             na = -1, Port_A, Port_B, Port_C, Port_D, Port_E
         };
 
@@ -49,11 +50,11 @@ namespace pins
             (uintptr_t)&(PORTD_PCR0),
             (uintptr_t)&(PORTE_PCR0),
         };
-        
+
         //----------------------------------------------------------------
         // Translate Teensy pin number to port and bitnr 
         // The map will be used by the complier only, no code will be generated
-        
+
         struct pinInfo {
             const portList port;
             const int pin;
@@ -165,8 +166,17 @@ namespace pins
         static constexpr uintptr_t pddrBB = pdirBB + 4 * 32;    //     GPIOx_PDDR = GPIOx_PDOR + 20
 
     public:
-        // Setting and getting the pin value     
-        inline operator bool() const { return  *((bool*)pdirBB); }    
+        // Setting and getting the pin value
+
+        pin() {}
+        pin(int i) { pinMode(i); }
+        pin(const pin&) = delete;
+        inline void operator = (const pin& v) const = delete;
+        
+
+        template<class T>
+        operator T() const { return *reinterpret_cast<volatile uint32_t*>(pdirBB); }
+        operator bool() const { return *reinterpret_cast<volatile uint32_t*>(pdirBB) & 1; } 
         inline void operator = (const bool v) const { *reinterpret_cast<volatile uint32_t*>(pdorBB) = v; } // assignment  --> somePin = HIGH
         static inline void toggle() { *reinterpret_cast<volatile uint32_t*>(ptorBB) = 1; }                // toggles pin
         static inline int  getValue() { return *reinterpret_cast<volatile uint32_t*>(pdirBB); }           // returns pin value (usefull for static calls) 
@@ -205,7 +215,7 @@ namespace pins
                 break;
             }
         }
-        
+
         static inline void driveStrengthEnable(bool enable)
         {
             //TBD static_assert: pin has DSE capability 
