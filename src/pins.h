@@ -7,8 +7,7 @@ namespace pins
 {
     namespace // private
     {
-        enum boards
-        {
+        enum boards{
             notDefined = -1,
             T_LC,
             T3_0_1_2,
@@ -24,12 +23,10 @@ namespace pins
 #else
         constexpr boards  board = boards::notDefined;
 #endif
-
         static_assert(board != boards::notDefined, "Error in Pin.h");
 
         // Indices into GPIOx and PORT arrays below
-        enum portList
-        {
+        enum portList{
             na = -1, Port_A, Port_B, Port_C, Port_D, Port_E
         };
 
@@ -52,12 +49,11 @@ namespace pins
             (uintptr_t)&(PORTD_PCR0),
             (uintptr_t)&(PORTE_PCR0),
         };
-
-
+        
         //----------------------------------------------------------------
         // Translate Teensy pin number to port and bitnr 
         // The map will be used by the complier only, no code will be generated
-
+        
         struct pinInfo {
             const portList port;
             const int pin;
@@ -171,10 +167,8 @@ namespace pins
 
     public:
         // Setting and getting the pin value
-
         inline operator bool() const { return  *((bool*)pdirBB); }
-        inline operator unsigned() const { return  *reinterpret_cast<volatile uint32_t*>(pdirBB); }
-
+        //inline operator unsigned() const { return  *reinterpret_cast<volatile uint32_t*>(pdirBB); }
         inline void operator = (const int v) const { *reinterpret_cast<volatile uint32_t*>(pdorBB) = v; } // assignment  --> somePin = HIGH
         static inline void toggle() { *reinterpret_cast<volatile uint32_t*>(ptorBB) = 1; }                // toggles pin
         static inline int  getValue() { return *reinterpret_cast<volatile uint32_t*>(pdirBB); }           // returns pin value (usefull for static calls) 
@@ -182,10 +176,10 @@ namespace pins
         static inline void setHIGH() { *reinterpret_cast<volatile uint32_t*>(psorBB) = 1; }               // sets pin to HIGH (usefull for static calls) 
         static inline void setLOW() { *reinterpret_cast<volatile uint32_t*>(pcorBB) = 1; }                // sets pin to LOW (usefull for static calls)     
 
-                                                                                                          // Pin configuration
+        // Pin configuration
         static inline void pinMode(int mode)
         {
-            // replace by call to pinMode(pinNr,mode) ??? TBD
+            // replace by a call to pinMode(pinNr,mode) ??? TBD
             switch (mode)
             {
             case OUTPUT:
@@ -213,7 +207,7 @@ namespace pins
                 break;
             }
         }
-
+        
         static inline void driveStrengthEnable(bool enable)
         {
             //TBD static_assert: pin has DSE capability 
@@ -228,7 +222,6 @@ namespace pins
         static inline void slowSlewRateEnable(bool enable)
         {
             //TBD static_assert: pin has SRE capability 
-
             if (enable) {
                 *reinterpret_cast<uint32_t*>(pcr) |= PORT_PCR_SRE;
             }
