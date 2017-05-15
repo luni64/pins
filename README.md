@@ -33,7 +33,7 @@ void loop()
 }
 ```
 ## Advanced Features
-You can also use the static interface of the pin class directly:
+You can use the static interface of the pin class directly:
 ```c++
 pin<3>() = HIGH; 
 pin<4>::toggle();
