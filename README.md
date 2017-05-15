@@ -75,9 +75,9 @@ is faster than the usual
 digitalWriteFast(13,!digitalReadFast(13));
 ```
 ### Comparison
-Paul hast demonstrated how extremly fast *digitalWriteFast()* really is in this post: https://forum.pjrc.com/threads/41874-STRANGE-GPIO-speed-perfomance-with-digitalWriteFast()-(ring-oscillator-example)?p=132359&viewfull=1#post132359.
+Paul has demonstrated how extremly fast *digitalWriteFast()* really is in this post: https://forum.pjrc.com/threads/41874-STRANGE-GPIO-speed-perfomance-with-digitalWriteFast()-(ring-oscillator-example)?p=132359&viewfull=1#post132359.
 
-Here the standard code and the generated machine instructions:
+Here his code and the generated machine instructions (Optimize: Fast, O1)
 ```c++
 void loop() {
     while (1) {
