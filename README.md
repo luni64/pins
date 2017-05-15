@@ -49,7 +49,7 @@ LED.driveStrengthEnable(false);      // which would be a bad idea of course...
 pin<7>::slowSlewRateEnable(false);   // enables full slew rate for the pin
 ```
 
-If you need to change the pin assignment, e.g. you want to move Serial1 from the standard pins 0 and 1 to its alternative pins 21 and 5 (those pins which are grayed out on the pinout cards) you can use:
+If you need to change the pin assignment, e.g. you want to move Serial1 on a T3.2 from its standard pins 0 and 1 to the alternative pins 21 and 5 (those pins which are grayed out on the pinout cards) you can use:
 ```c++
 pin<21>::setMUX(ALT3);  // Set alternative function of pin21 to ALT3
 pin<5>::setMUX(ALT3);   // Set alternative function of pin5 to ALT3
