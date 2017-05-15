@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include <core_pins.h>
+#include <type_traits>
 
 namespace pins
 {
@@ -172,7 +173,7 @@ namespace pins
         pin(const pin&) = delete;  // disable copy constructor
         
         // Setting and getting the pin value
-        template<class T>
+        template<class T, typename = typename std::enable_if<std::is_integral<T>::value>::type>
         operator T() const { return *reinterpret_cast<volatile uint32_t*>(pdirBB); }
         operator bool() const { return *reinterpret_cast<volatile uint32_t*>(pdirBB) & 1; } 
         inline void operator = (const bool v) const { *reinterpret_cast<volatile uint32_t*>(pdorBB) = v; } // assignment  --> somePin = HIGH
@@ -180,10 +181,10 @@ namespace pins
         
         // Pin operations
         static inline void toggle() { *reinterpret_cast<volatile uint32_t*>(ptorBB) = 1; }                // toggles pin
-        static inline int  getValue() { return *reinterpret_cast<volatile uint32_t*>(pdirBB); }           // returns pin value (usefull for static calls) 
-        static inline void setValue(const int v) { *reinterpret_cast<volatile uint32_t*>(pdorBB) = v; }   // sets value (usefull for static calls) 
-        static inline void setHIGH() { *reinterpret_cast<volatile uint32_t*>(psorBB) = 1; }               // sets pin to HIGH (usefull for static calls) 
-        static inline void setLOW() { *reinterpret_cast<volatile uint32_t*>(pcorBB) = 1; }                // sets pin to LOW (usefull for static calls)     
+        //static inline int  getValue() { return *reinterpret_cast<volatile uint32_t*>(pdirBB); }           // returns pin value (usefull for static calls) 
+        //static inline void setValue(const int v) { *reinterpret_cast<volatile uint32_t*>(pdorBB) = v; }   // sets value (usefull for static calls) 
+        //static inline void setHIGH() { *reinterpret_cast<volatile uint32_t*>(psorBB) = 1; }               // sets pin to HIGH (usefull for static calls) 
+        //static inline void setLOW() { *reinterpret_cast<volatile uint32_t*>(pcorBB) = 1; }                // sets pin to LOW (usefull for static calls)     
 
         // Pin configuration
         static inline void pinMode(int mode)
@@ -238,15 +239,15 @@ namespace pins
                 *reinterpret_cast<uint32_t*>(pcr) &= ~PORT_PCR_SRE;
             }
         }
+        
+        static inline void setMUX(pinMux altFunc)
+        {
+            *reinterpret_cast<uint32_t*>(pcr) = (*reinterpret_cast<uint32_t*>(pcr) & ~PORT_PCR_MUX_MASK) | PORT_PCR_MUX(altFunc);
+        }
 
         static inline void attachInterrupt(void(*function)(void), int mode)
         {
             ::attachInterrupt(pinNr, function, mode);
-        }
-
-        static inline void setMUX(pinMux altFunc)
-        {
-            *reinterpret_cast<uint32_t*>(pcr) = (*reinterpret_cast<uint32_t*>(pcr) & ~PORT_PCR_MUX_MASK) | PORT_PCR_MUX(altFunc);
         }
     };
 }
