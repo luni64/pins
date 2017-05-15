@@ -38,6 +38,10 @@ You can use the static interface of the pin class directly:
 pin<3>() = HIGH; 
 pin<4>::toggle();
 pin<5>::pinMode(OUTPUT_OPENDRAIN);
+
+// in case you quickly want to set a pin for debugging something without first declaring it and setting its 
+// pinMode somewhere just do a 
+pin<28>(OUTPUT) = HIGH;
 ```
 Attaching an interrupt to a pin: 
 ```c++
