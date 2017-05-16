@@ -1,5 +1,5 @@
 # pins
-This library is provides an alternative to the usual pin access by pinMode, digitalWriteFast and digitalReadFast for Teensy ARM boards (T-LC up to T-3.6). Generated code is as efficient as calling the standard pin manipulation functions. 
+This library is provides an alternative interface to the usual pin access by pinMode, digitalWriteFast and digitalReadFast for Teensy ARM boards (T-LC up to T-3.6). The generated code is as efficient as calling the standard pin manipulation functions. Both methods can be used in parallel. 
 
 # Usage
 The following sketch shows the basic usage of the pin class
